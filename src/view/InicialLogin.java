@@ -6,6 +6,8 @@
 package view;
 
 import controller.Controller;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.net.MalformedURLException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -13,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -29,6 +32,8 @@ public class InicialLogin extends javax.swing.JFrame {
      */
     public InicialLogin() {
         initComponents();
+
+
     }
 
     /**
@@ -181,10 +186,38 @@ public class InicialLogin extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jPasswordField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jPasswordField1ActionPerformed
 
+    private void jPasswordField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField1ActionPerformed
+         try {
+            String login = jTextField1.getText();
+            String senha = new String(jPasswordField1.getPassword());
+
+            controller = new Controller("localhost");
+            int resultado = controller.logar(login, senha);
+            switch (resultado) {
+                case 0:
+                    JOptionPane.showMessageDialog(this,
+                            "Usuário já está online", "Erro", JOptionPane.ERROR_MESSAGE);
+                    break;
+                case 1:
+                    System.out.println("LOGADO");
+                    break;
+
+                case 2:
+                    JOptionPane.showMessageDialog(this,
+                            "Usuário não cadastrado", "Erro", JOptionPane.ERROR_MESSAGE);
+                    break;
+
+            }
+        } catch (RemoteException | NotBoundException | MalformedURLException ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Erro de conexão com servidor", "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Insira informações de login e senha", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jPasswordField1ActionPerformed
+    
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         //JDialog telaEditar = new EditarAquivo(this,true);
         try {
