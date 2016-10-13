@@ -223,6 +223,7 @@ public class InicialLogin extends javax.swing.JFrame {
         try {
             String login = jTextField1.getText();
             String senha = new String(jPasswordField1.getPassword());
+            
 
             controller = new Controller("localhost");
             int resultado = controller.logar(login, senha);
