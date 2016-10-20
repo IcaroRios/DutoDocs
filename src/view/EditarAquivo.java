@@ -98,6 +98,7 @@ public class EditarAquivo extends javax.swing.JDialog {
         getContentPane().add(jPanel4, java.awt.BorderLayout.LINE_START);
 
         jTextArea1.setColumns(20);
+        jTextArea1.setLineWrap(true);
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 

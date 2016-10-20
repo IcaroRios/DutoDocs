@@ -21,5 +21,11 @@ public class Controller {
         return cliente.deslogar(nome, senha);
     }
 
+    public String buscaArquivos() throws RemoteException {
+        return cliente.listarDocumentos();
+    }
 
+    public boolean criarArquivos(String nome) throws RemoteException {
+        return cliente.criarDocumento(nome);
+    }
 }

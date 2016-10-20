@@ -201,6 +201,7 @@ public class InicialLogin extends javax.swing.JFrame {
                     break;
                 case 1:
                     System.out.println("LOGADO");
+                    JDialog telaEscolherArquivo = new EscolherArquivo(this,true,controller);
                     break;
 
                 case 2:
@@ -234,6 +235,7 @@ public class InicialLogin extends javax.swing.JFrame {
                     break;
                 case 1:
                     System.out.println("LOGADO");
+                    JDialog telaEscolherArquivo = new EscolherArquivo(this,true,controller);
                     break;
 
                 case 2:
