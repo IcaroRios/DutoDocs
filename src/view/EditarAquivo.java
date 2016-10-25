@@ -6,21 +6,36 @@
 package view;
 
 import controller.Controller;
+import java.awt.event.WindowEvent;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.rmi.RemoteException;
 
 /**
  *
  * @author Neida
  */
 public class EditarAquivo extends javax.swing.JDialog {
+
     private Controller controller;
+
     /**
      * Creates new form NewJDialog
      */
-    public EditarAquivo(java.awt.Frame parent, boolean modal,Controller controller) {        
+    public EditarAquivo(java.awt.Frame parent, boolean modal, Controller controller) throws RemoteException {
         super(parent, modal);
         this.controller = controller;
         initComponents();
+        this.abrirArquivo();
         this.setVisible(true);
+        
     }
 
     /**
@@ -125,10 +140,13 @@ public class EditarAquivo extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+        this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }//GEN-LAST:event_jButton3ActionPerformed
 
-
+    private void abrirArquivo() throws RemoteException {        
+        jTextArea1.setText(controller.abrirArquivo(controller.getArquivo()));
+        
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton2;

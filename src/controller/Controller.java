@@ -8,7 +8,25 @@ import model.Client;
 public class Controller {
 
     private final Client cliente;
+    private String login;
+    private String arquivo;
 
+    public String getArquivo() {
+        return arquivo;
+    }
+
+    public void setArquivo(String arquivo) {
+        this.arquivo = arquivo;
+    }
+    
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+    
     public Controller(String ip) throws NotBoundException, MalformedURLException, RemoteException {
         this.cliente = new Client(ip);
     }
@@ -17,8 +35,8 @@ public class Controller {
         return cliente.logar(nome, senha);
     }
 
-    public boolean deslogar(String nome, String senha) throws RemoteException {
-        return cliente.deslogar(nome, senha);
+    public boolean deslogar() throws RemoteException {
+        return cliente.deslogar(login);
     }
 
     public String buscaArquivos() throws RemoteException {
@@ -27,5 +45,9 @@ public class Controller {
 
     public boolean criarArquivos(String nome) throws RemoteException {
         return cliente.criarDocumento(nome);
+    }
+    
+    public String abrirArquivo(String nome) throws RemoteException{
+        return cliente.abrirArquivo(nome);
     }
 }

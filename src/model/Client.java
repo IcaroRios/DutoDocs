@@ -19,8 +19,8 @@ public class Client {
         return gerenciador.logar(nome, senha);
     }
 
-    public boolean deslogar(String nome, String senha) throws RemoteException {
-        return gerenciador.deslogar(nome, senha);
+    public boolean deslogar(String nome) throws RemoteException {
+        return gerenciador.deslogar(nome);
     }
 
     public String listarDocumentos() throws RemoteException {
@@ -29,5 +29,9 @@ public class Client {
 
     public boolean criarDocumento(String nome) throws RemoteException {
         return gerenciador.criarDocumento(nome);
+    }
+    
+    public String abrirArquivo(String nome) throws RemoteException{
+        return gerenciador.abrirArquivo(nome);
     }
 }

@@ -6,6 +6,7 @@
 package view;
 
 import controller.Controller;
+import java.awt.event.WindowEvent;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,6 +28,7 @@ public class EscolherArquivo extends javax.swing.JDialog {
         initComponents();
         receberLista();
         this.setVisible(true);
+        
     }
 
     /**
@@ -47,10 +49,20 @@ public class EscolherArquivo extends javax.swing.JDialog {
         jTextField1 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         jScrollPane1.setViewportView(jList1);
 
         jButton1.setText("Abrir Arquivo Selecionado");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Criar Novo Arquivo ");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -60,6 +72,11 @@ public class EscolherArquivo extends javax.swing.JDialog {
         });
 
         jButton3.setText("Sair");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Atualizar");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -119,7 +136,9 @@ public class EscolherArquivo extends javax.swing.JDialog {
         try {
             receberLista();
         } catch (RemoteException ex) {
-            Logger.getLogger(EscolherArquivo.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this,
+                    "Erro de conexão com servidor", "Erro", JOptionPane.ERROR_MESSAGE);
+            this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         }
     }//GEN-LAST:event_jButton4ActionPerformed
 
@@ -137,12 +156,48 @@ public class EscolherArquivo extends javax.swing.JDialog {
         } catch (RemoteException ex) {
             JOptionPane.showMessageDialog(this,
                     "Erro de conexão com servidor", "Erro", JOptionPane.ERROR_MESSAGE);
+            this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        try {
+            controller.deslogar();
+        } catch (RemoteException ex) {
+            System.out.println("erro ao deslogar");
+        }
+    }//GEN-LAST:event_formWindowClosed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        try {
+            controller.deslogar();
+            this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+        } catch (RemoteException ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Erro de conexão com servidor", "Erro", JOptionPane.ERROR_MESSAGE);
+            this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String arquivo = jList1.getSelectedValue();
+        if(arquivo == null)
+        JOptionPane.showMessageDialog(this,
+                    "Nenhum arquivo selecionado", "Erro", JOptionPane.ERROR_MESSAGE);
+        else{
+            controller.setArquivo(arquivo);
+            try {
+                EditarAquivo tela = new EditarAquivo(null, rootPaneCheckingEnabled, controller);
+            } catch (RemoteException ex) {
+                Logger.getLogger(EscolherArquivo.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     private void receberLista() throws RemoteException{
         
