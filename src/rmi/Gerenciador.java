@@ -14,5 +14,6 @@ public interface Gerenciador extends Remote {
     public boolean criarDocumento(String nome) throws RemoteException;
     
     public String abrirArquivo(String nome) throws  RemoteException;
-
+    
+    public String escreverArquivo(String arquivo,String texto) throws RemoteException;
 }

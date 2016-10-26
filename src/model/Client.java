@@ -34,4 +34,7 @@ public class Client {
     public String abrirArquivo(String nome) throws RemoteException{
         return gerenciador.abrirArquivo(nome);
     }
+    public String escreverArquivo(String arquivo, String texto) throws RemoteException{
+        return gerenciador.escreverArquivo( arquivo,texto);
+    }
 }

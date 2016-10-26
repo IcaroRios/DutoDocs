@@ -10,7 +10,15 @@ public class Controller {
     private final Client cliente;
     private String login;
     private String arquivo;
+    private int carret;
 
+    public int getCarret() {
+        return carret;
+    }
+
+    public void setCarret(int carret) {
+        this.carret = carret;
+    }
     public String getArquivo() {
         return arquivo;
     }
@@ -49,5 +57,9 @@ public class Controller {
     
     public String abrirArquivo(String nome) throws RemoteException{
         return cliente.abrirArquivo(nome);
+    }
+    
+    public String escreverArquivo(String arquivo, String texto) throws RemoteException{
+        return cliente.escreverArquivo(arquivo, texto);
     }
 }
