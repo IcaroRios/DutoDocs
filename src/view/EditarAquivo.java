@@ -220,7 +220,7 @@ public class EditarAquivo extends javax.swing.JDialog {
     }//GEN-LAST:event_formWindowClosing
     
     private void jTextArea1CaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_jTextArea1CaretUpdate
-        /*
+        
         System.out.println(jTextArea1.getCaretPosition());
         try {
             int linha = posicaoLinha();            
@@ -228,7 +228,7 @@ public class EditarAquivo extends javax.swing.JDialog {
         } catch (RemoteException ex) {
             Logger.getLogger(EditarAquivo.class.getName()).log(Level.SEVERE, null, ex);
         }
-        */
+        
     }//GEN-LAST:event_jTextArea1CaretUpdate
     
     private void abrirArquivo() throws RemoteException {
