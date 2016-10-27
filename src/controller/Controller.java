@@ -19,6 +19,7 @@ public class Controller {
     public void setCarret(int carret) {
         this.carret = carret;
     }
+
     public String getArquivo() {
         return arquivo;
     }
@@ -26,7 +27,7 @@ public class Controller {
     public void setArquivo(String arquivo) {
         this.arquivo = arquivo;
     }
-    
+
     public String getLogin() {
         return login;
     }
@@ -34,7 +35,7 @@ public class Controller {
     public void setLogin(String login) {
         this.login = login;
     }
-    
+
     public Controller(String ip) throws NotBoundException, MalformedURLException, RemoteException {
         this.cliente = new Client(ip);
     }
@@ -54,12 +55,16 @@ public class Controller {
     public boolean criarArquivos(String nome) throws RemoteException {
         return cliente.criarDocumento(nome);
     }
-    
-    public String abrirArquivo(String nome) throws RemoteException{
+
+    public String abrirArquivo(String nome) throws RemoteException {
         return cliente.abrirArquivo(nome);
     }
-    
-    public String escreverArquivo(String arquivo, String texto) throws RemoteException{
-        return cliente.escreverArquivo(arquivo, texto);
+
+    public String escreverArquivo(String arquivo, String texto, int linha) throws RemoteException {
+        return cliente.escreverArquivo(arquivo, texto, linha, this.login);
+    }
+
+    public void pedirLinhaArquivo(int linha, String login, String arquivo) throws RemoteException {
+        cliente.pedirLinhaArquivo(linha, login, arquivo);
     }
 }

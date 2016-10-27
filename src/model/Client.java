@@ -30,11 +30,16 @@ public class Client {
     public boolean criarDocumento(String nome) throws RemoteException {
         return gerenciador.criarDocumento(nome);
     }
-    
-    public String abrirArquivo(String nome) throws RemoteException{
+
+    public String abrirArquivo(String nome) throws RemoteException {
         return gerenciador.abrirArquivo(nome);
     }
-    public String escreverArquivo(String arquivo, String texto) throws RemoteException{
-        return gerenciador.escreverArquivo( arquivo,texto);
+
+    public String escreverArquivo(String arquivo, String texto, int linha, String login) throws RemoteException {
+        return gerenciador.escreverArquivo(arquivo, texto, linha, login);
+    }
+
+    public void pedirLinhaArquivo(int linha, String login, String arquivo) throws RemoteException {
+        gerenciador.pedirLinhaArquivo(linha, login,arquivo);
     }
 }

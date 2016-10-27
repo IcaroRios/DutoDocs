@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package view;
+package model;
 
 import controller.Controller;
 import static java.lang.Thread.sleep;
@@ -33,7 +33,7 @@ public class Atualizar implements Runnable {
             try {
                 String texto = controller.abrirArquivo(controller.getArquivo());
                 if (!textArea.getText().equals(texto)) {
-                    controller.setCarret(textArea.getCaretPosition());
+                    //controller.setCarret(textArea.getCaretPosition());
                     textArea.setText(texto);
                     System.out.println("texto diferente, modificando");
                     //textArea.setCaretPosition(controller.getCarret());
@@ -46,7 +46,6 @@ public class Atualizar implements Runnable {
                 Logger.getLogger(Atualizar.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
     }
 
 }

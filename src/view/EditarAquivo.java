@@ -5,6 +5,7 @@
  */
 package view;
 
+import model.Atualizar;
 import controller.Controller;
 import java.awt.Event;
 import java.awt.event.WindowEvent;
@@ -20,6 +21,7 @@ import java.nio.file.Path;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -29,6 +31,7 @@ public class EditarAquivo extends javax.swing.JDialog {
 
     private Controller controller;
     private Thread thread;
+
     /**
      * Creates new form NewJDialog
      */
@@ -39,10 +42,9 @@ public class EditarAquivo extends javax.swing.JDialog {
         this.abrirArquivo();
         thread = new Thread(new Atualizar(controller, this.jTextArea1));
         thread.start();
-        
+
         this.setVisible(true);
-        
-        
+
     }
 
     /**
@@ -124,6 +126,11 @@ public class EditarAquivo extends javax.swing.JDialog {
         jTextArea1.setLineWrap(true);
         jTextArea1.setRows(5);
         jTextArea1.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        jTextArea1.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                jTextArea1CaretUpdate(evt);
+            }
+        });
         jTextArea1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextArea1KeyReleased(evt);
@@ -152,26 +159,56 @@ public class EditarAquivo extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
+
     private void jTextArea1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextArea1KeyReleased
         char tecla = evt.getKeyChar();
         int a = tecla;
         System.out.println(a);
         if (a != 65535) {
-            int c = jTextArea1.getCaretPosition();
-            System.out.println(tecla + " " + c);
-            try {
-                controller.escreverArquivo(controller.getArquivo(), jTextArea1.getText());
-            } catch (RemoteException ex) {
-                Logger.getLogger(EditarAquivo.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            //ap.atualiza(System.currentTimeMillis());
-            //controller.escreveArquivo(nome, tecla, c - 1);
-            //this.atualizarTextArea();
-            jTextArea1.setCaretPosition(c);
+            int c = jTextArea1.getCaretPosition();// posição do cursor
             
+            try {
+                int cursorLinha = posicaoLinha(); // pega a linha do arquivo o qual foi escrito
+                System.out.println("o cursor está na linha: " + cursorLinha);
+                
+                controller.escreverArquivo(controller.getArquivo(), jTextArea1.getText(), cursorLinha);
+                jTextArea1.setCaretPosition(c);
+            } catch (RemoteException ex) {
+                JOptionPane.showMessageDialog(this,
+                        "Erro de comunicação com o servidor", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+
         }
     }//GEN-LAST:event_jTextArea1KeyReleased
+
+    private int posicaoLinha() throws RemoteException {
+        int c = jTextArea1.getCaretPosition();// posição do cursor
+        int pseudoCursor = c;
+        int contadorCaracteres = 0;// deve contar os caracteres do texto
+        // o contador de caracteres está em -1 para em caso de estar no final do arquivo
+        int cursorLinha = -1;// deve indicar em qual linha o cursor está
+        int contadorLinha = 0;// conta em qual linha o loop está
+
+        String texto = controller.abrirArquivo(controller.getArquivo());
+        String[] linhas = texto.split("\n");
+
+        for (String linha : linhas) {
+            pseudoCursor--;// diminuo 1 devido a ultipa posicao da linha;
+            contadorCaracteres += linha.length();
+
+            if (pseudoCursor <= contadorCaracteres) {
+
+                cursorLinha = contadorLinha;                
+                break;
+            }
+            contadorLinha++;
+        }
+        if (cursorLinha == -1) {
+            cursorLinha = linhas.length;
+        }
+
+        return cursorLinha;
+    }
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
@@ -181,7 +218,19 @@ public class EditarAquivo extends javax.swing.JDialog {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         thread.stop();
     }//GEN-LAST:event_formWindowClosing
-        
+    
+    private void jTextArea1CaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_jTextArea1CaretUpdate
+        /*
+        System.out.println(jTextArea1.getCaretPosition());
+        try {
+            int linha = posicaoLinha();            
+            controller.pedirLinhaArquivo(linha,controller.getLogin(),controller.getArquivo());
+        } catch (RemoteException ex) {
+            Logger.getLogger(EditarAquivo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        */
+    }//GEN-LAST:event_jTextArea1CaretUpdate
+    
     private void abrirArquivo() throws RemoteException {
         jTextArea1.setText(controller.abrirArquivo(controller.getArquivo()));
 
