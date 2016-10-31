@@ -5,7 +5,7 @@
  */
 package view;
 
-import model.Atualizar;
+import model.AtualizarAntiga;
 import controller.Controller;
 import java.awt.Event;
 import java.awt.event.WindowEvent;
@@ -22,6 +22,7 @@ import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import model.Atualizar;
 
 /**
  *
@@ -41,6 +42,7 @@ public class EditarAquivo extends javax.swing.JDialog {
         initComponents();
         this.abrirArquivo();
         thread = new Thread(new Atualizar(controller, this.jTextArea1));
+        //thread = new Thread(new AtualizarAntiga(controller, this.jTextArea1));
         thread.start();
 
         this.setVisible(true);
@@ -166,13 +168,19 @@ public class EditarAquivo extends javax.swing.JDialog {
         System.out.println(a);
         if (a != 65535) {
             int c = jTextArea1.getCaretPosition();// posição do cursor
-            
+
             try {
                 int cursorLinha = posicaoLinha(); // pega a linha do arquivo o qual foi escrito
                 System.out.println("o cursor está na linha: " + cursorLinha);
                 
-                controller.escreverArquivo(controller.getArquivo(), jTextArea1.getText(), cursorLinha);
-                jTextArea1.setCaretPosition(c);
+                String resultado = controller.escreverArquivo(controller.getArquivo(), jTextArea1.getText(), cursorLinha);
+                if (resultado != null) {
+                    JOptionPane.showMessageDialog(this,
+                            "Você não é o dono desta linha", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+                if (c>=0 &&c < jTextArea1.getText().length()) {
+                    jTextArea1.setCaretPosition(c);
+                }
             } catch (RemoteException ex) {
                 JOptionPane.showMessageDialog(this,
                         "Erro de comunicação com o servidor", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -198,7 +206,7 @@ public class EditarAquivo extends javax.swing.JDialog {
 
             if (pseudoCursor <= contadorCaracteres) {
 
-                cursorLinha = contadorLinha;                
+                cursorLinha = contadorLinha;
                 break;
             }
             contadorLinha++;
@@ -218,19 +226,19 @@ public class EditarAquivo extends javax.swing.JDialog {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         thread.stop();
     }//GEN-LAST:event_formWindowClosing
-    
+
     private void jTextArea1CaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_jTextArea1CaretUpdate
-        
+
         System.out.println(jTextArea1.getCaretPosition());
         try {
-            int linha = posicaoLinha();            
-            controller.pedirLinhaArquivo(linha,controller.getLogin(),controller.getArquivo());
+            int linha = posicaoLinha();
+            controller.pedirLinhaArquivo(linha, controller.getLogin(), controller.getArquivo());
         } catch (RemoteException ex) {
             Logger.getLogger(EditarAquivo.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }//GEN-LAST:event_jTextArea1CaretUpdate
-    
+
     private void abrirArquivo() throws RemoteException {
         jTextArea1.setText(controller.abrirArquivo(controller.getArquivo()));
 

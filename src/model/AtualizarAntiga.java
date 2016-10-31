@@ -17,12 +17,12 @@ import javax.swing.JTextField;
  *
  * @author Neida
  */
-public class Atualizar implements Runnable {
+public class AtualizarAntiga implements Runnable {
 
     private Controller controller;
     private JTextArea textArea;
 
-    public Atualizar(Controller controller, JTextArea textArea) {
+    public AtualizarAntiga(Controller controller, JTextArea textArea) {
         this.controller = controller;
         this.textArea = textArea;
     }
@@ -33,32 +33,19 @@ public class Atualizar implements Runnable {
             try {
                 String texto = controller.abrirArquivo(controller.getArquivo());
                 if (!textArea.getText().equals(texto)) {
-                    int carret = textArea.getCaretPosition();
-                    texto = removerUltimoEnter(texto);
+                    //controller.setCarret(textArea.getCaretPosition());
                     textArea.setText(texto);
                     System.out.println("texto diferente, modificando");
-                    if (carret <= texto.length()) {
-                        textArea.setCaretPosition(carret);
-                    } else {
-                        textArea.setCaretPosition(texto.length());
-                    }
-                } else {
+                    //textArea.setCaretPosition(controller.getCarret());
+                }else
                     System.out.println("texto é igual");
-                }
                 sleep(2000);
             } catch (InterruptedException ex) {
-                Logger.getLogger(Atualizar.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(AtualizarAntiga.class.getName()).log(Level.SEVERE, null, ex);
             } catch (RemoteException ex) {
-                Logger.getLogger(Atualizar.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(AtualizarAntiga.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
     }
 
-    public String removerUltimoEnter(String str) {
-        if (str != null && str.length() > 0 && str.charAt(str.length() - 1) == '\n') {
-            str = str.substring(0, str.length() - 1);
-        }
-        return str;
-    }
 }
